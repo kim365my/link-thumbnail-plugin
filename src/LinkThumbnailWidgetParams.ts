@@ -81,6 +81,9 @@ async function getOgData(url: string) {
                 let imgUrl = document.querySelector("meta[property='og:image']")?.getAttribute("content") || "";
                 if (imgUrl !== "") {
                     const baseUrl = url.replace(urlArr[4], "");
+                    if (imgUrl.startsWith("//")) {
+                        imgUrl = "https:" + imgUrl;
+                    }
                     if (!imgUrl.startsWith("http")) {
                         imgUrl = baseUrl + (imgUrl.startsWith("/"))? "" : "/" + imgUrl;
                     }

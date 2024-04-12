@@ -51,6 +51,8 @@ class StatefulDecorationSet {
                 linkEl.href = token.value;
                 linkEl.addClass("markdown-rendered");
                 linkEl.addClass("external-link");
+                linkEl.setAttribute("data-tooltip-position", "top");
+				linkEl.setAttribute("aria-label", token.value);
                 div.appendChild(linkEl);
                 const params = await LinkThumbnailWidgetParams(token.value);
                 if (params) {

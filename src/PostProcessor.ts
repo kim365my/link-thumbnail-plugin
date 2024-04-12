@@ -22,6 +22,8 @@ export class PostProcessor {
 			if (params != null) {
 				linkEl.innerHTML = params;
 				linkEl.addClass("markdown-rendered");
+				linkEl.setAttribute("data-tooltip-position", "top");
+				linkEl.setAttribute("aria-label", url);
 				linkEl.addEventListener("click", (e) => e.stopPropagation());
 			}
 		}
