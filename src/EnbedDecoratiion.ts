@@ -1,9 +1,10 @@
 import {debounce, editorLivePreviewField} from "obsidian";
-import {EditorView, Decoration, DecorationSet, ViewUpdate, ViewPlugin, WidgetType} from "@codemirror/view";
+import {EditorView, Decoration, DecorationSet, ViewUpdate, ViewPlugin} from "@codemirror/view";
 import {StateField, StateEffect, StateEffectType, Range} from "@codemirror/state";
 import {syntaxTree, tokenClassNodeProp} from "@codemirror/language";
 import LinkThumbnailPlugin from "./main";
 import { LinkThumbnailWidgetParams } from "./LinkThumbnailWidgetParams";
+import { ogLinkWidget } from "./ogLinkWidget";
 
 //based on: https://gist.github.com/nothingislost/faa89aa723254883d37f45fd16162337
 
@@ -149,23 +150,3 @@ function defineStatefulDecoration(): {
     return {update, field};
 }
 
-class ogLinkWidget extends WidgetType {
-    private readonly source: HTMLDivElement;
-
-    constructor(source: HTMLDivElement) {
-        super();
-        this.source = source;
-    }
-
-    eq(other: ogLinkWidget) {
-        return other == this;
-    }
-
-    toDOM() {
-        return this.source;
-    }
-
-    ignoreEvent(): boolean {
-        return false;
-    }
-}

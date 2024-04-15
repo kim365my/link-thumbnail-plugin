@@ -35,6 +35,22 @@ a:has(.openGraphPreview):hover {
     text-decoration: none; 
     color: var(--text-normal);
 }
+
+table > tbody > tr> td:has(.openGraphPreview) {
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+table > tbody > tr> td > .table-cell-wrapper:has(.openGraphPreview) {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+table > tbody > tr> td .openGraphPreview {
+    border-left: 0;
+    border-right: 0;
+}
+
 .openGraphPreview .se-oglink-thumbnail {
     width: 100%;
 }
@@ -72,12 +88,7 @@ a:has(.openGraphPreview):hover {
     text-overflow: ellipsis;
 }
 
-.table-cards table .openGraphPreview,
-.cards table .openGraphPreview {
-    border: none;
-}
-
-@container openGraphPreview (width > 400px) {
+@container openGraphPreview (width > 360px) {
     .openGraphPreview {
         flex-direction: row;
     }

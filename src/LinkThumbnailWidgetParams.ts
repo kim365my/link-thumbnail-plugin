@@ -118,7 +118,7 @@ export async function LinkThumbnailWidgetParams(url: string) {
     if (data) {
         return `
         <div class="openGraphPreview">
-            ${(data?.ogImage === "")? "" : `<div class="se-oglink-thumbnail"><img src="${data?.ogImage}" alt="${data?.ogImageAlt}" class="se-oglink-thumbnail-resource"></img></div>`}
+            ${(data?.ogImage === "")? "" : `<div class="se-oglink-thumbnail"><img src="${data?.ogImage}" alt="${data?.ogImageAlt}" loading="lazy" class="se-oglink-thumbnail-resource"></img></div>`}
             <div class="se-oglink-info-container">
                 <strong class="se-oglink-info">${data?.ogTitle}</strong>
                 <description class="se-oglink-summary">${data?.ogDescription}</description>
