@@ -1,5 +1,6 @@
 import { RequestUrlParam, requestUrl } from "obsidian";
 import { decode } from 'iconv-lite';
+import localforage from "localforage";
 
 interface ogData {
     "ogTitle": string,
@@ -48,10 +49,9 @@ async function getImgFile(imgUrl: string) {
 
 async function getOgData(url: string) {
     // 로컬데이터 접근
-    const data = localStorage.getItem(OGDATACHACHE + url);
+    const data = await localforage.getItem(url);
     if (data) {
-        const ogData: ogData = JSON.parse(data);
-        return ogData;
+        return data;
     } else {
         const urlArr = urlRegex.exec(url);
         if (urlArr) {
@@ -102,7 +102,7 @@ async function getOgData(url: string) {
                     "ogUrl": ogUrl
                 }
     
-                localStorage.setItem(OGDATACHACHE + url, JSON.stringify(data));
+                await localforage.setItem(url, data);
                 return data;
             } catch (error) {
                 console.error(error);

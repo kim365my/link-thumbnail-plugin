@@ -104,7 +104,7 @@ function buildViewPlugin(plugin: LinkThumbnailPlugin) {
                         enter: ({node, from, to}) => {
                             const tokenProps = node.type.prop<string>(tokenClassNodeProp);
 
-                            if (tokenProps && node.name === "url") {
+                            if (tokenProps && node.name.includes("url")) {
                                 const value = view.state.doc.sliceString(from, to);
                                 if (value) {
                                     targetElements.push({from: from, to: to, value: value});
