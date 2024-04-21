@@ -16,15 +16,16 @@ export class PostProcessor {
 		// 링크 변환
 		const linkEls:Element[] = element.findAll("a.external-link:not(.cm-formatting, .markdown-rendered)");
 		for (const linkEl of linkEls) {
-
-			const url = linkEl.innerHTML;
-			const params = await LinkThumbnailWidgetParams(url);
-			if (params != null) {
-				linkEl.innerHTML = params;
-				linkEl.addClass("markdown-rendered");
-				linkEl.setAttribute("data-tooltip-position", "top");
-				linkEl.setAttribute("aria-label", url);
-				linkEl.addEventListener("click", (e) => e.stopPropagation());
+			if (!linkEl.closest(".noLinkThumbnail")) {				
+				const url = linkEl.innerHTML;
+				const params = await LinkThumbnailWidgetParams(url);
+				if (params != null) {
+					linkEl.innerHTML = params;
+					linkEl.addClass("markdown-rendered");
+					linkEl.setAttribute("data-tooltip-position", "top");
+					linkEl.setAttribute("aria-label", url);
+					linkEl.addEventListener("click", (e) => e.stopPropagation());
+				}
 			}
 		}
 	};

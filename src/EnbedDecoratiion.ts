@@ -103,10 +103,7 @@ function buildViewPlugin(plugin: LinkThumbnailPlugin) {
                     tree.iterate({
                         enter: ({node, from, to}) => {
                             const tokenProps = node.type.prop<string>(tokenClassNodeProp);
-                            if (node.parent?.type?.prop<string>(tokenClassNodeProp)?.includes("noLinkThumbnail")) {
-                                // dataview 클래스를 갖는 부모 요소인 경우 건너뜁니다.
-                                return;
-                            }
+                            
                             if (tokenProps && node.name === "url") {
                                 const value = view.state.doc.sliceString(from, to);
                                 if (value) {
