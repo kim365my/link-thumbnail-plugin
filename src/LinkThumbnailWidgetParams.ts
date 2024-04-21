@@ -48,7 +48,7 @@ async function getImgFile(imgUrl: string) {
 
 async function getOgData(url: string) {
     // 로컬데이터 접근
-    const data = await localforage.getItem(url);
+    const data = await localforage.getItem(url) as ogData;
     if (data) {
         return data;
     } else {
