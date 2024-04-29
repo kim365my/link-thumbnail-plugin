@@ -7,19 +7,19 @@ If your plugin does not need CSS, delete this file.
 
 */
 
-a:has(.openGraphPreview) {
+.og-link {
     display: block;
     padding-right: 0;
     text-decoration: none;
     background-image: none;
-    container-name: openGraphPreview;
+    container-name: og-link;
     container-type: inline-size;
 }
-a:has(.openGraphPreview):hover {
+.og-link:hover {
     text-decoration: none;
 }
-.openGraphPreview {
-    height: 100%;
+.og-link .og-preview {
+    height: auto;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -31,44 +31,53 @@ a:has(.openGraphPreview):hover {
     background: none;
 
 }
-.openGraphPreview:hover {
+.og-preview:hover {
     text-decoration: none; 
     color: var(--text-normal);
 }
 
-table > tbody > tr> td:has(.openGraphPreview) {
+table > tbody > tr> td:has(.og-link) {
     background: none !important;
     padding: 0 !important;
     margin: 0 !important;
     width: 100% !important;
 }
-table > tbody > tr> td > .table-cell-wrapper:has(.openGraphPreview) {
+table > tbody > tr> td > .table-cell-wrapper:has(.og-link) {
     padding: 0 !important;
     margin: 0 !important;
 }
-table > tbody > tr> td .openGraphPreview {
+table > tbody > tr> td .og-preview {
     border-left: 0;
     border-right: 0;
 }
 
-.openGraphPreview .se-oglink-thumbnail {
+.og-preview .og-thumbnail {
     width: 100%;
 }
-.openGraphPreview .se-oglink-thumbnail-resource {
+.og-preview .og-thumbnail img {
     height: 100%;
     max-height: 150px;
     object-fit: cover !important;
     border-radius: 0 !important;
 }
-.openGraphPreview .se-oglink-info-container {
+.og-preview .og-info-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 4px;
-    overflow: auto;
+    gap: 8px;
+    overflow: hidden;
     padding: var(--size-4-3) var(--size-4-2);
 }
-.openGraphPreview .se-oglink-summary {
+.og-preview .og-info-container .og-info {
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    display: box;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+.og-preview .og-summary {
     font-size: 0.8rem;
     overflow: hidden;
     -webkit-line-clamp: 2;
@@ -79,7 +88,7 @@ table > tbody > tr> td .openGraphPreview {
     white-space: normal;
     color: var(--text-normal);
 }
-.openGraphPreview .se-oglink-url {
+.og-preview .og-url {
     font-size: 0.8rem;
     margin-block: 0 !important;
     color: var(--link-color);
@@ -88,11 +97,12 @@ table > tbody > tr> td .openGraphPreview {
     text-overflow: ellipsis;
 }
 
-@container openGraphPreview (width > 360px) {
-    .openGraphPreview {
+@container og-link (width > 360px) {
+    .og-link .og-preview {
+        height: 150px;
         flex-direction: row;
     }
-    .openGraphPreview .se-oglink-thumbnail {
+    .og-preview .og-thumbnail {
         width: 150px;
         flex-shrink: 0;
     }

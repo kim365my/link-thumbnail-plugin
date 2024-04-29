@@ -1,6 +1,6 @@
 import { MarkdownPostProcessorContext } from "obsidian";
 import LinkThumbnailPlugin from "./main";
-import { LinkThumbnailWidgetParams } from "./LinkThumbnailWidgetParams";
+import { LinkThumbnailWidgetParams, urlRegex } from "./LinkThumbnailWidgetParams";
 
 export class PostProcessor {
 	plugin: LinkThumbnailPlugin;
@@ -17,11 +17,13 @@ export class PostProcessor {
 		const linkEls:Element[] = element.findAll("a.external-link:not(.cm-formatting, .markdown-rendered)");
 		for (const linkEl of linkEls) {
 			const url = linkEl.innerHTML;
-			if (!linkEl.closest(".noLinkThumbnail") && url.startsWith("http")) {				
+			// url이 적합한 지 판벌
+			const isUrl = urlRegex.test(url);
+			if (!linkEl.closest(".noLinkThumbnail") && isUrl) {				
 				const params = await LinkThumbnailWidgetParams(url);
 				if (params != null) {
 					linkEl.innerHTML = params;
-					linkEl.addClass("markdown-rendered");
+                    linkEl.className = "markdown-rendered external-link og-link";
 					linkEl.setAttribute("data-tooltip-position", "top");
 					linkEl.setAttribute("aria-label", url);
 					linkEl.addEventListener("click", (e) => e.stopPropagation());

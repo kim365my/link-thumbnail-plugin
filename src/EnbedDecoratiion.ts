@@ -3,8 +3,9 @@ import {EditorView, Decoration, DecorationSet, ViewUpdate, ViewPlugin} from "@co
 import {StateField, StateEffect, StateEffectType, Range} from "@codemirror/state";
 import {syntaxTree, tokenClassNodeProp} from "@codemirror/language";
 import LinkThumbnailPlugin from "./main";
-import { LinkThumbnailWidgetParams } from "./LinkThumbnailWidgetParams";
+import { LinkThumbnailWidgetParams, urlRegex } from "./LinkThumbnailWidgetParams";
 import { ogLinkWidget } from "./ogLinkWidget";
+import { link } from "fs";
 
 //based on: https://gist.github.com/nothingislost/faa89aa723254883d37f45fd16162337
 
@@ -26,42 +27,42 @@ class StatefulDecorationSet {
         this.plugin = plugin;
     }
 
-    async computeAsyncDecorations(tokens: TokenSpec[]): Promise<DecorationSet | null> {
-        // 현재 모드 판별
-        const isSourceMode = !this.editor.state.field(editorLivePreviewField);
+    async computeAsyncDecorations(tokens: TokenSpec[]): Promise<DecorationSet | null> {    
         // 현재 선택된 부분
         const selectFrom = this.editor.state.selection.main.from;
         const selectTo = this.editor.state.selection.main.to;
+    
+        tokens = tokens.filter((token) => {
+            // 현재 선택영역 판별
+            const isSelected = (selectFrom <= token.to && selectTo >= token.from) || (selectFrom >= token.from && selectTo <= token.to);
+            // url이 적합한 지 판벌
+            const isUrl = urlRegex.test(token.value);
+            return !isSelected && isUrl
+        });
 
         const decorations: Range<Decoration>[] = [];
-        for (const token of tokens) {
-            const isSelected = (selectFrom <= token.to && selectTo >= token.from) || (selectFrom >= token.from && selectTo <= token.to);
-            
-            if (isSelected || isSourceMode) {
-                return Decoration.none;
-            }
-
+        for (const token of tokens) {    
             let deco = this.decoCache[token.value];
+            
             if (!deco) {
                 const div = createDiv();
                 // 클래스 추가
-                div.addClass("cm-embed-block");
-                div.addClass("cm-embed-link");
+                div.className = "cm-embed-block cm-embed-link";
                 // 넣을 EL 받아오기
                 const linkEl = createEl("a");
                 linkEl.href = token.value;
-                linkEl.addClass("markdown-rendered");
-                linkEl.addClass("external-link");
+                linkEl.className = "markdown-rendered external-link og-link";
                 linkEl.setAttribute("data-tooltip-position", "top");
-				linkEl.setAttribute("aria-label", token.value);
+                linkEl.setAttribute("aria-label", token.value);
+                linkEl.addEventListener("click", (e) => e.stopPropagation());
                 div.appendChild(linkEl);
-                const params = await LinkThumbnailWidgetParams(token.value);
-                if (params) {
-                    linkEl.innerHTML = params;
-                    linkEl.addEventListener("click", (e) => e.stopPropagation());
-                } else if (params === null) {
-                    linkEl.innerHTML = token.value;
+                
+                const widget = await LinkThumbnailWidgetParams(token.value);
+                if (widget === null) {
+                    continue;
                 }
+                linkEl.innerHTML = widget;
+                
                 deco = this.decoCache[token.value] = Decoration.replace({widget: new ogLinkWidget(div), block: true});
             }
             decorations.push(deco.range(token.from, token.to));
@@ -72,7 +73,9 @@ class StatefulDecorationSet {
     debouncedUpdate = debounce(this.updateAsyncDecorations, 100, true);
 
     async updateAsyncDecorations(tokens: TokenSpec[]): Promise<void> {
-        const decorations = await this.computeAsyncDecorations(tokens);
+        // 현재 모드 판별
+        const isLivePreviewMode = this.editor.state.field(editorLivePreviewField);
+        const decorations = (isLivePreviewMode)? await this.computeAsyncDecorations(tokens): null;
         // if our compute function returned nothing and the state field still has decorations, clear them out
         if (decorations || this.editor.state.field(statefulDecorations.field).size) {
             this.editor.dispatch({effects: statefulDecorations.update.of(decorations || Decoration.none)});
@@ -103,7 +106,6 @@ function buildViewPlugin(plugin: LinkThumbnailPlugin) {
                     tree.iterate({
                         enter: ({node, from, to}) => {
                             const tokenProps = node.type.prop<string>(tokenClassNodeProp);
-                            
                             if (tokenProps && node.name === "url") {
                                 const value = view.state.doc.sliceString(from, to);
                                 if (value) {
