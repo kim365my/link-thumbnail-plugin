@@ -70,12 +70,8 @@ table > tbody > tr> td .og-preview {
 }
 .og-preview .og-info-container .og-info {
     overflow: hidden;
-    -webkit-line-clamp: 2;
-    display: box;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
     text-overflow: ellipsis;
-    white-space: normal;
+    white-space: nowrap;
 }
 .og-preview .og-summary {
     font-size: 0.8rem;
@@ -99,7 +95,7 @@ table > tbody > tr> td .og-preview {
 
 @container og-link (width > 360px) {
     .og-link .og-preview {
-        height: 150px;
+        height: 130px;
         flex-direction: row;
     }
     .og-preview .og-thumbnail {
