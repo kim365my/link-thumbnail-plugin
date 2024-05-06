@@ -5,7 +5,6 @@ import {syntaxTree, tokenClassNodeProp} from "@codemirror/language";
 import LinkThumbnailPlugin from "./main";
 import { LinkThumbnailWidgetParams, urlRegex } from "./LinkThumbnailWidgetParams";
 import { ogLinkWidget } from "./ogLinkWidget";
-import { link } from "fs";
 
 //based on: https://gist.github.com/nothingislost/faa89aa723254883d37f45fd16162337
 

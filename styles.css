@@ -95,7 +95,7 @@ table > tbody > tr> td .og-preview {
 
 @container og-link (width > 360px) {
     .og-link .og-preview {
-        height: 130px;
+        max-height: 130px;
         flex-direction: row;
     }
     .og-preview .og-thumbnail {

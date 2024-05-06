@@ -13,7 +13,7 @@ interface ogData {
 // url 정규식
 export const urlRegex = new RegExp("^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$");
 const baseUrl = new RegExp("^https?:\\/\\/[^\\/]+");
-const charsetRegex = new RegExp(/<meta charset=\\?"(.*)\\?"/i);
+const charsetRegex = new RegExp(/charset=["']?(.+?)["']/gi);
 
 // 저장하기 전에 img 데이터를 url-> blob -> base64로 변환 후 저장
 async function getImgFile(imgUrl: string) {
