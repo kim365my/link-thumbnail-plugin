@@ -44,25 +44,26 @@ class StatefulDecorationSet {
             let deco = this.decoCache[token.value];
             
             if (!deco) {
-                const div = createDiv();
-                // 클래스 추가
-                div.className = "cm-embed-block cm-embed-link";
-                // 넣을 EL 받아오기
-                const linkEl = createEl("a");
-                linkEl.href = token.value;
-                linkEl.className = "markdown-rendered external-link og-link";
-                linkEl.setAttribute("data-tooltip-position", "top");
-                linkEl.setAttribute("aria-label", token.value);
-                linkEl.addEventListener("click", (e) => e.stopPropagation());
-                div.appendChild(linkEl);
-                
                 const widget = await LinkThumbnailWidgetParams(token.value);
                 if (widget === null) {
-                    continue;
+                    deco = this.decoCache[token.value] = Decoration.mark({attributes: {class: "noLinkThumbnail"}});
+                } else {
+                    const div = createDiv();
+                    // 클래스 추가
+                    div.className = "cm-embed-block cm-embed-link";
+                    // 넣을 EL 받아오기
+                    const linkEl = createEl("a");
+                    linkEl.href = token.value;
+                    linkEl.className = "markdown-rendered external-link og-link";
+                    linkEl.setAttribute("data-tooltip-position", "top");
+                    linkEl.setAttribute("aria-label", token.value);
+                    linkEl.addEventListener("click", (e) => e.stopPropagation());
+                    div.appendChild(linkEl);
+
+                    linkEl.innerHTML = widget;
+                    deco = this.decoCache[token.value] = Decoration.replace({widget: new ogLinkWidget(div), block: true});
                 }
-                linkEl.innerHTML = widget;
                 
-                deco = this.decoCache[token.value] = Decoration.replace({widget: new ogLinkWidget(div), block: true});
             }
             decorations.push(deco.range(token.from, token.to));
         }
@@ -106,6 +107,10 @@ function buildViewPlugin(plugin: LinkThumbnailPlugin) {
                         enter: ({node, from, to}) => {
                             const tokenProps = node.type.prop<string>(tokenClassNodeProp);
                             if (tokenProps && node.name === "url") {
+                                const parentElement = node.parent?.type;
+                                if (parentElement?.prop<string>(tokenClassNodeProp)?.includes("noLinkThumbnail")) {
+                                    return;
+                                }
                                 const value = view.state.doc.sliceString(from, to);
                                 if (value) {
                                     targetElements.push({from: from, to: to, value: value});
