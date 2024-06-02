@@ -110,20 +110,23 @@ async function getOgData(url: string) {
     }
 }
 
+function template(data: ogData): string {
+    return `
+        ${(data?.ogImage === "")? "" : `<div class="og-thumbnail"><img src="${data?.ogImage}" alt="${data?.ogImageAlt}" loading="lazy"></img></div>`}
+        <div class="og-info-container">
+            <strong class="og-info">${data?.ogTitle}</strong>
+            <description class="og-summary">${data?.ogDescription}</description>
+            <span class="og-url">${data?.ogUrl}</span>
+        </div>
+    `;
+}
 
 export async function LinkThumbnailWidgetParams(url: string) {
-    const data = await localforage.getItem(url) as ogData || await getOgData(url);    
-    if (data) {
-        return `
-        <div class="og-preview">
-            ${(data?.ogImage === "")? "" : `<div class="og-thumbnail"><img src="${data?.ogImage}" alt="${data?.ogImageAlt}" loading="lazy"></img></div>`}
-            <div class="og-info-container">
-                <strong class="og-info">${data?.ogTitle}</strong>
-                <description class="og-summary">${data?.ogDescription}</description>
-                <span class="og-url">${data?.ogUrl}</span>
-            </div>
-        </div>
-        `;
-    }
+    const data = await localforage.getItem(url) as ogData;
+    if (data) return template(data);
+    
+    const ogData = await getOgData(url);
+    if (ogData) return template(ogData);
+
     return null;
 }

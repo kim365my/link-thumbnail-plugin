@@ -6,33 +6,28 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
-
-.og-link {
+.cm-embed-link, *:has(> .og-link) {
     display: block;
-    padding-right: 0;
-    text-decoration: none;
-    background-image: none;
     container-name: og-link;
     container-type: inline-size;
 }
-.og-link:hover {
-    text-decoration: none;
-}
-.og-link .og-preview {
+.og-link {
+    width: 100%;
     height: auto;
-    display: flex;
+
+    display: inline-flex;
+    gap: 8px;
     flex-direction: column;
     flex-wrap: nowrap;
-    gap: 8px;
-    border: var(--cards-border-width) solid var(--background-modifier-border);
+
     background: none;
+    padding-right: 0;
+    border: 1px solid var(--divider-color);
     color: var(--text-normal);
     text-decoration: none;
-    background: none;
-
 }
-.og-preview:hover {
-    text-decoration: none; 
+.og-link:hover {
+    text-decoration: none;
     color: var(--text-normal);
 }
 
@@ -46,34 +41,23 @@ table > tbody > tr> td > .table-cell-wrapper:has(.og-link) {
     padding: 0 !important;
     margin: 0 !important;
 }
-table > tbody > tr> td .og-preview {
-    border-left: 0;
-    border-right: 0;
-}
 
-.og-preview .og-thumbnail {
+.og-thumbnail {
     width: 100%;
 }
-.og-preview .og-thumbnail img {
+.og-thumbnail img {
     height: 100%;
     max-height: 150px;
     object-fit: cover !important;
     border-radius: 0 !important;
 }
-.og-preview .og-info-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 8px;
-    overflow: hidden;
+.og-info-container {
     padding: var(--size-4-3) var(--size-4-2);
-}
-.og-preview .og-info-container .og-info {
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
 }
-.og-preview .og-summary {
+
+.og-summary {
     font-size: 0.8rem;
     overflow: hidden;
     -webkit-line-clamp: 2;
@@ -83,22 +67,21 @@ table > tbody > tr> td .og-preview {
     text-overflow: ellipsis;
     white-space: normal;
     color: var(--text-normal);
+    margin: 8px 0;
 }
-.og-preview .og-url {
+.og-url {
     font-size: 0.8rem;
     margin-block: 0 !important;
     color: var(--link-color);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 @container og-link (width > 360px) {
-    .og-link .og-preview {
+    .og-link {
         max-height: 130px;
         flex-direction: row;
+        gap: 0;
     }
-    .og-preview .og-thumbnail {
+    .og-thumbnail {
         width: 150px;
         flex-shrink: 0;
     }
