@@ -16,13 +16,12 @@ If your plugin does not need CSS, delete this file.
     height: auto;
 
     display: inline-flex;
-    gap: 8px;
+    gap: 0;
     flex-direction: column;
     flex-wrap: nowrap;
 
     background: none;
     padding-right: 0;
-    border: 1px solid var(--divider-color);
     color: var(--text-normal);
     text-decoration: none;
 }
@@ -41,7 +40,9 @@ table > tbody > tr> td > .table-cell-wrapper:has(.og-link) {
     padding: 0 !important;
     margin: 0 !important;
 }
-
+table > tbody > tr> td .og-link {
+    border: none;
+}
 .og-thumbnail {
     width: 100%;
 }
@@ -79,8 +80,10 @@ table > tbody > tr> td > .table-cell-wrapper:has(.og-link) {
     .og-link {
         max-height: 130px;
         flex-direction: row;
-        gap: 0;
+        gap: 8px;
+        border: 1px solid var(--divider-color);
     }
+
     .og-thumbnail {
         width: 150px;
         flex-shrink: 0;

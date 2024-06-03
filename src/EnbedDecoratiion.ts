@@ -4,7 +4,7 @@ import {StateField, StateEffect, StateEffectType, Range} from "@codemirror/state
 import {syntaxTree, tokenClassNodeProp} from "@codemirror/language";
 import LinkThumbnailPlugin from "./main";
 import { LinkThumbnailWidgetParams, urlRegex } from "./LinkThumbnailWidgetParams";
-import { ogLinkWidget } from "./ogLinkWidget";
+import { WidgetType } from "@codemirror/view";
 
 //based on: https://gist.github.com/nothingislost/faa89aa723254883d37f45fd16162337
 
@@ -154,5 +154,25 @@ function defineStatefulDecoration(): {
         provide: field => EditorView.decorations.from(field),
     });
     return {update, field};
+}
+class ogLinkWidget extends WidgetType {
+    private readonly source: HTMLDivElement;
+
+    constructor(source: HTMLDivElement) {
+        super();
+        this.source = source;
+    }
+
+    eq(other: ogLinkWidget) {
+        return other == this;
+    }
+
+    toDOM() {
+        return this.source;
+    }
+
+    ignoreEvent(): boolean {
+        return false;
+    }
 }
 

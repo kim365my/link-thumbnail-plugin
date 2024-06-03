@@ -19,7 +19,7 @@ export class PostProcessor {
 			const url = linkEl.innerHTML;
 			// url이 적합한 지 판벌
 			const isUrl = urlRegex.test(url);
-			if (!linkEl.closest(".noLinkThumbnail") && isUrl) {				
+			if (!linkEl.closest(".noLinkThumbnail") && isUrl) {
 				const params = await LinkThumbnailWidgetParams(url);
 				if (params != null) {
 					linkEl.innerHTML = params;

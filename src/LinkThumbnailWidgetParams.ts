@@ -1,14 +1,7 @@
 import { RequestUrlParam, requestUrl } from "obsidian";
 import { decode } from 'iconv-lite';
 import localforage from "localforage";
-
-interface ogData {
-    "ogTitle": string,
-    "ogDescription": string,
-    "ogImage": string,
-    "ogImageAlt": string,
-    "ogUrl": string
-}
+import { ogData } from "./ogData";
 
 // url 정규식
 export const urlRegex = new RegExp("^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$");
