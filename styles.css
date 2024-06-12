@@ -1,64 +1,57 @@
-/*
-
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
-
-If your plugin does not need CSS, delete this file.
-
-*/
 .cm-embed-link, *:has(> .og-link) {
     display: block;
     container-name: og-link;
     container-type: inline-size;
-}
-.og-link {
+  }
+  @container og-link (width > 300px) {
+    .cm-embed-link .og-link, *:has(> .og-link) .og-link {
+      max-height: 100px;
+      flex-direction: row;
+      gap: 8px;
+      border: 1px solid var(--divider-color);
+    }
+    .cm-embed-link .og-link .og-thumbnail, *:has(> .og-link) .og-link .og-thumbnail {
+      width: 120px;
+      max-height: none;
+      flex-shrink: 0;
+    }
+  }
+  
+  .og-link {
     width: 100%;
     height: auto;
-
     display: inline-flex;
     gap: 0;
     flex-direction: column;
     flex-wrap: nowrap;
-
     background: none;
     padding-right: 0;
     color: var(--text-normal);
     text-decoration: none;
-}
-.og-link:hover {
+  }
+  .og-link:hover {
     text-decoration: none;
     color: var(--text-normal);
-}
-
-table > tbody > tr> td:has(.og-link) {
-    background: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 100% !important;
-}
-table > tbody > tr> td > .table-cell-wrapper:has(.og-link) {
-    padding: 0 !important;
-    margin: 0 !important;
-}
-table > tbody > tr> td .og-link {
-    border: none;
-}
-.og-thumbnail {
+  }
+  .og-link .og-thumbnail {
+    max-height: 80px;
+    overflow: hidden;
+  }
+  .og-link .og-thumbnail img {
     width: 100%;
-}
-.og-thumbnail img {
     height: 100%;
-    max-height: 150px;
-    object-fit: cover !important;
+    -o-object-fit: cover !important;
+       object-fit: cover !important;
+    -o-object-position: center;
+       object-position: center;
     border-radius: 0 !important;
-}
-.og-info-container {
+  }
+  .og-link .og-info-container {
     padding: var(--size-4-3) var(--size-4-2);
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.og-summary {
+  }
+  .og-link .og-info-container .og-summary {
     font-size: 0.8rem;
     overflow: hidden;
     -webkit-line-clamp: 2;
@@ -68,24 +61,24 @@ table > tbody > tr> td .og-link {
     text-overflow: ellipsis;
     white-space: normal;
     color: var(--text-normal);
-    margin: 8px 0;
-}
-.og-url {
+    margin: 4px 0;
+  }
+  .og-link .og-info-container .og-url {
     font-size: 0.8rem;
     margin-block: 0 !important;
     color: var(--link-color);
-}
-
-@container og-link (width > 360px) {
-    .og-link {
-        max-height: 130px;
-        flex-direction: row;
-        gap: 8px;
-        border: 1px solid var(--divider-color);
-    }
-
-    .og-thumbnail {
-        width: 150px;
-        flex-shrink: 0;
-    }
-}
+  }
+  
+  table > tbody > tr > td > :has(.og-link) {
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+  table > tbody > tr > td .table-cell-wrapper:has(.og-link) {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  :is(.cards, .table-cards) table > tbody > tr > td .og-link {
+    border: none;
+  }
