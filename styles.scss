@@ -1,0 +1,94 @@
+.cm-embed-link, *:has(> .og-link) {
+    display: block;
+    container-name: og-link;
+    container-type: inline-size;
+
+    @container og-link (width > 300px) {
+        .og-link {
+            max-height: 120px;
+            flex-direction: row;
+            gap: 8px;
+            border: 1px solid var(--divider-color);
+        }
+
+        .og-link .og-thumbnail {
+            width: 120px;
+            max-height: none;
+            flex-shrink: 0;
+        }
+    }
+}
+
+.og-link {
+    width: 100%;
+    height: auto;
+
+    display: inline-flex;
+    gap: 0;
+    flex-direction: column;
+    flex-wrap: nowrap;
+
+    background: none;
+    padding-right: 0;
+    color: var(--text-normal);
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: none;
+        color: var(--text-normal);
+    }
+
+    .og-thumbnail {
+        max-height: 80px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover !important;
+            object-position: center;
+            border-radius: 0 !important;
+        }
+    }
+
+    .og-info-container {
+        padding: var(--size-4-3) var(--size-4-2);
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        .og-summary {
+            font-size: 0.8rem;
+            overflow: hidden;
+            -webkit-line-clamp: 2;
+            display: box;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+            white-space: normal;
+            color: var(--text-normal);
+        }
+        .og-url {
+            font-size: 0.8rem;
+            margin-block: 0 !important;
+            color: var(--link-color);
+        }
+    }
+
+}
+
+table > tbody > tr> td {
+    &>:has(.og-link) {
+        background: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+    }
+    .table-cell-wrapper:has(.og-link) {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    :is(.cards, .table-cards) & .og-link {
+        border: none;
+    }
+}
