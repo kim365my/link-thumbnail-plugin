@@ -1,7 +1,8 @@
-import { RequestUrlParam, requestUrl } from "obsidian";
+import { RequestUrlParam, arrayBufferToBase64, requestUrl } from "obsidian";
 import { decode } from 'iconv-lite';
 import localforage from "localforage";
 import { ogData } from "./ogData";
+import { gBuffer as Buffer } from "./Buffer";
 
 // url 정규식
 export const urlRegex = new RegExp("^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$");
@@ -25,13 +26,7 @@ async function getImgFile(imgUrl: string) {
         }
 
         const file = await requestUrl(options);
-        const fileArrayBuffer = file.arrayBuffer;
-
-        // 방법 2) ArrayBuffer 자체를 base64로 변환
-        const uint8 = new Uint8Array(fileArrayBuffer);
-        const base64String = btoa(uint8.reduce((data, byte)=> {
-            return data + String.fromCharCode(byte);
-        }, ''));
+        const base64String = arrayBufferToBase64(file.arrayBuffer);
         if (imgType.includes("svg")) imgType += "+xml";
         return `data:image/${imgType};charset=utf-8;base64,` + base64String;
 
@@ -52,19 +47,14 @@ async function getOgData(url: string) {
         // 인코딩 문제 해결
         const bodyArrayBuffer = response.arrayBuffer;        
         const regex = charsetRegex.exec(response.text);
-        
-        let charset = "utf-8";
-        if (regex) {
-            charset = regex[1];
-        } else {
-            charset = contentType.substring(contentType.indexOf("charset=") + 8, contentType.length);
-        }
+        const charset = (regex)? regex[1] : contentType.substring(contentType.indexOf("charset=") + 8, contentType.length);
 
         let body;
         if (charset === "utf-8") {
             body = Buffer.from(bodyArrayBuffer).toString('utf-8');
         } else {
-            body = decode(Buffer.from(bodyArrayBuffer), charset);
+            const decoder = new TextDecoder(charset);
+            body = decoder.decode(Buffer.from(bodyArrayBuffer));
         }
         
         const parser = new DOMParser();
